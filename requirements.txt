@@ -2,3 +2,4 @@ Flask
 Flask-Login
 Flask-SQLAlchemy
 gunicorn
+Flask-Mail==0.9.1
