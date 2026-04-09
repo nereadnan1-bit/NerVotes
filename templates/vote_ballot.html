@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5 animate__animated animate__fadeIn">
+
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Election Ballot</h2>
+        <p class="text-muted">Select your preferred candidate for <b>{{ election.name }}</b></p>
+    </div>
+
+    <form method="POST" action="{{ url_for('cast_vote', election_id=election.id) }}">
+
+        <div class="row g-4">
+
+            {% for candidate in candidates %}
+            <div class="col-md-4">
+
+                <label class="candidate-card w-100">
+
+                    <input type="radio"
+                           name="candidate_id"
+                           value="{{ candidate.id }}"
+                           required>
+
+                    <div class="card shadow-sm border-0 h-100">
+
+                        <div class="text-center pt-4">
+
+                            {% if candidate.photo %}
+                            <img src="{{ url_for('static', filename='uploads/' + candidate.photo) }}"
+                                 class="candidate-img">
+                            {% else %}
+                            <img src="{{ url_for('static', filename='default_candidate.png') }}"
+                                 class="candidate-img">
+                            {% endif %}
+
+                        </div>
+
+                        <div class="card-body text-center">
+
+                            <h5 class="fw-bold">
+                                {{ candidate.full_name }}
+                            </h5>
+
+                            <p class="text-muted small">
+                                {{ candidate.manifesto[:120] }}...
+                            </p>
+
+                        </div>
+
+                        <div class="card-footer bg-white border-0 text-center pb-4">
+
+                            <span class="btn btn-outline-primary w-75 vote-btn">
+                                Select Candidate
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </label>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+        <div class="text-center mt-5">
+            <button class="btn btn-success btn-lg px-5 shadow">
+                🗳 Submit Vote
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+<style>
+
+.candidate-card input{
+    display:none;
+}
+
+.candidate-card{
+    cursor:pointer;
+}
+
+.candidate-img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid #f1f1f1;
+}
+
+.candidate-card input:checked + .card{
+    border:3px solid #0d6efd;
+    transform:scale(1.02);
+    transition:0.2s;
+}
+
+.vote-btn{
+    pointer-events:none;
+}
+
+.card{
+    border-radius:12px;
+    transition:0.2s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+}
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4 animate__animated animate__fadeIn">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h2 class="fw-bold text-dark mb-0">Admin <span class="text-primary">System Control</span></h2>
+            <p class="text-muted small">Manage elections, verify candidates, and oversee system integrity.</p>
+        </div>
+        <div>
+           
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0 p-4 text-center bg-white border-start border-primary border-4">
+                <h6 class="text-muted text-uppercase small fw-bold">Total Users</h6>
+                <h2 class="fw-bold mb-0">{{ total_users }}</h2>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0 p-4 text-center bg-white border-start border-success border-4">
+                <h6 class="text-muted text-uppercase small fw-bold">Elections</h6>
+                <h2 class="fw-bold mb-0 text-success">{{ total_elections }}</h2>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0 p-4 text-center bg-white border-start border-info border-4">
+                <h6 class="text-muted text-uppercase small fw-bold">Votes Cast</h6>
+                <h2 class="fw-bold mb-0 text-info">{{ total_votes }}</h2>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0 p-4 text-center bg-white border-start border-warning border-4">
+                <h6 class="text-muted text-uppercase small fw-bold">Candidates</h6>
+                <h2 class="fw-bold mb-0 text-warning">{{ total_candidates }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-header bg-white py-3 border-bottom-0">
+            <h5 class="mb-0 fw-bold"><i class="fas fa-plus-circle text-primary me-2"></i>Initialize New Election</h5>
+        </div>
+        <div class="card-body bg-light-subtle rounded-bottom">
+            <form method="POST" action="{{ url_for('create_election') }}">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="small fw-bold text-muted">Election Title</label>
+                        <input type="text" name="name" class="form-control" placeholder="e.g. Presidential 2026" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold text-muted">Start Date</label>
+                        <input type="date" name="start" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold text-muted">End Date</label>
+                        <input type="date" name="end" class="form-control" required>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button class="btn btn-primary w-100 fw-bold shadow-sm">Create</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-5 border-top border-warning border-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold text-dark">⚠️ Candidate Approval Queue</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3">Candidate Info</th>
+                            <th>Election Target</th>
+                            <th>Candidate details</th>
+                            <th class="text-end pe-3">Verification Action</th>
+                        </tr>
+                    </thead>
+                  <tbody>
+
+{% for c in pending_candidates %}
+
+<tr>
+
+<td class="ps-3">
+
+<div class="d-flex align-items-center gap-3">
+
+<img src="{{ url_for('static', filename='uploads/' + c.photo) }}"
+style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
+
+<div>
+
+<div class="fw-bold">{{ c.full_name }}</div>
+
+<div class="text-muted small">
+{{ c.user.custom_id }}
+</div>
+
+</div>
+
+</div>
+
+</td>
+
+<td>
+
+<strong>{{ c.election.name }}</strong>
+
+</td>
+
+<td>
+
+<small class="text-muted">
+
+{{ c.manifesto }}
+
+</small>
+
+</td>
+
+<td class="text-end pe-3">
+
+<div class="btn-group">
+
+<a class="btn btn-success btn-sm px-3 fw-bold"
+href="{{ url_for('approve_candidate', candidate_id=c.id) }}">
+
+Approve
+
+</a>
+
+<a class="btn btn-outline-danger btn-sm"
+href="{{ url_for('reject_candidate', candidate_id=c.id) }}">
+
+Reject
+
+</a>
+
+</div>
+
+</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+
+<td colspan="4" class="text-center py-5 text-muted">
+
+No pending applications.
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-header bg-white py-3 border-bottom-0">
+            <h5 class="mb-0 fw-bold">Ongoing & Past Elections</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3 text-uppercase small text-muted">ID</th>
+                            <th class="text-uppercase small text-muted">Election Name</th>
+                            <th class="text-uppercase small text-muted">Timeline</th>
+                            <th class="text-uppercase small text-muted">Status</th>
+                            <th class="text-end pe-3 text-uppercase small text-muted">Audit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in elections %}
+                        <tr>
+                            <td class="ps-3 text-muted">#{{ e.id }}</td>
+                            <td class="fw-bold text-dark">{{ e.name }}</td>
+                            <td>
+                                <span class="small text-muted">
+                                    <i class="far fa-calendar-alt me-1"></i>
+                                    {{ e.start_date.strftime('%Y-%m-%d') }} ➔ {{ e.end_date.strftime('%Y-%m-%d') }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge {% if e.status == 'active' %}bg-success{% else %}bg-secondary{% endif %} px-3">
+                                    {{ e.status|capitalize }}
+                                </span>
+                            </td>
+                            <td class="text-end pe-3">
+                                <a class="btn btn-sm btn-outline-primary fw-bold" href="{{ url_for('results', election_id=e.id) }}">
+                                    View Live Results
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-light-subtle { background-color: #f8f9fa; }
+    .btn-group .btn { border-radius: 6px; }
+    .btn-group .btn:first-child { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+    .btn-group .btn:last-child { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+</style>
+
+{% endblock %}

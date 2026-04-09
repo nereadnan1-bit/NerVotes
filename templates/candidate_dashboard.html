@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4 animate__animated animate__fadeIn">
+    
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-sm border-0 bg-white">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        {% if application %}
+                            {% if application.is_approved %}
+                                <div class="flex-shrink-0 me-4">
+                                    <div class="rounded-circle bg-success-subtle p-3">
+                                        <i class="fas fa-check-circle fa-3x text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h3 class="fw-bold mb-1 text-dark">Candidacy Approved!</h3>
+                                    <p class="mb-0 text-muted">You are officially running in <strong>{{ application.election.name }}</strong>.</p>
+                                    <span class="badge bg-success mt-2 px-3 shadow-sm">On the Ballot</span>
+                                </div>
+                            {% else %}
+                                <div class="flex-shrink-0 me-4">
+                                    <div class="rounded-circle bg-warning-subtle p-3">
+                                        <i class="fas fa-clock fa-3x text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h3 class="fw-bold mb-1 text-dark">Application Pending</h3>
+                                    <p class="mb-0 text-muted">Waiting for Admin approval for <strong>{{ application.election.name }}</strong>.</p>
+                                    <span class="badge bg-warning text-dark mt-2 px-3 border border-warning-subtle">Verification in Progress</span>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="flex-shrink-0 me-4 text-light">
+                                <i class="fas fa-user-plus fa-3x text-secondary-emphasis opacity-25"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h3 class="fw-bold mb-1 text-dark">Ready to Run?</h3>
+                                <p class="mb-2 text-muted">Submit your application to participate in an upcoming election.</p>
+                                <a href="{{ url_for('candidate_apply') }}" class="btn btn-primary btn-sm fw-bold shadow-sm px-4">Start Application</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="py-5 my-5 text-center">
+        <hr class="w-25 mx-auto opacity-10">
+    </div>
+
+    <div class="mt-auto">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold text-dark mb-0">
+                <i class="fas fa-vote-yea text-primary me-2"></i>Available Elections
+            </h5>
+            <span class="badge rounded-pill bg-light text-dark border px-3">{{ active_elections|length }} Live</span>
+        </div>
+
+        <div class="row g-4">
+            {% for election in active_elections %}
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100 election-card border-bottom border-primary border-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle">ACTIVE</span>
+                            <small class="text-muted">#{{ election.id }}</small>
+                        </div>
+                        <h5 class="fw-bold mb-2 text-dark">{{ election.name }}</h5>
+                        <p class="small text-muted mb-0">
+                            <i class="far fa-calendar-alt me-1"></i> Ends: {{ election.end_date.strftime('%Y-%m-%d') }}
+                        </p>
+                    </div>
+                    <div class="card-footer bg-white border-0 pb-3 text-center">
+                        <hr class="mt-0 opacity-10">
+                        <small class="text-success fw-bold text-uppercase" style="letter-spacing: 1px; font-size: 0.7rem;">Open for Entry</small>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <div class="p-5 border border-2 border-dashed rounded-4 bg-light">
+                    <i class="fas fa-layer-group fa-3x text-muted mb-3 opacity-50"></i>
+                    <p class="text-muted mb-0">No active elections found.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .election-card { transition: all 0.3s ease; }
+    .election-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important; }
+    .bg-success-subtle { background-color: #d1e7dd; }
+    .bg-warning-subtle { background-color: #fff3cd; }
+    .bg-primary-subtle { background-color: #cfe2ff; }
+    .border-dashed { border-style: dashed !important; }
+</style>
+{% endblock %}

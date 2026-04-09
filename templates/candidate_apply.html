@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5 animate__animated animate__fadeIn">
+
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Candidate <span class="text-primary">Application</span></h2>
+        <p class="text-muted">Submit your candidacy for an active election</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card shadow border-0">
+                <div class="card-body p-5">
+
+                    <form method="POST" enctype="multipart/form-data">
+
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Select Election</label>
+                            <select name="election_id" class="form-select" required>
+                                <option value="">Choose Election</option>
+                                {% for e in elections %}
+                                <option value="{{ e.id }}">{{ e.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                      
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Full Name</label>
+                            <input type="text" name="full_name" class="form-control" placeholder="Enter your full name" required>
+                        </div>
+
+                      
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Campaign Statement</label>
+                            <textarea name="manifesto" rows="5" class="form-control" placeholder="Describe your goals and plans if elected..." required></textarea>
+                        </div>
+
+                       
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Candidate Photo</label>
+                            <input type="file" name="photo" class="form-control" accept="image/*" required>
+                            <small class="text-muted">Upload a professional photo for voters to recognize you.</small>
+                        </div>
+
+                        
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary px-5 py-2 fw-bold shadow-sm">
+                                Submit Application
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<style>
+
+.card{
+    border-radius:12px;
+}
+
+.form-control, .form-select{
+    border-radius:8px;
+}
+
+textarea{
+    resize:none;
+}
+
+button{
+    border-radius:8px;
+}
+
+</style>
+
+{% endblock %}

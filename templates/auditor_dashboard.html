@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4 animate__animated animate__fadeIn">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h2 class="fw-bold text-dark">
+                <span class="text-primary">🛡️ Official</span> Audit Logs
+            </h2>
+            <p class="text-muted small mb-0">verification and UIDs for professional voting!!</p>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-outline-dark btn-sm" onclick="window.print()">
+                🖨️ Export PDF Report
+            </button>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 bg-light p-3">
+                <small class="text-uppercase fw-bold text-muted">Integrity Status</small>
+                <h5 class="mb-0 text-success">Verified ✅</h5>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 bg-light p-3">
+                <small class="text-uppercase fw-bold text-muted">Total Events</small>
+                <h5 class="mb-0 text-primary">{{ logs|length }} Entries</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="ps-4">Timestamp</th>
+                            <th>System UID</th>
+                            <th>Action Performed</th>
+                            <th class="text-end pe-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr {% if "Admin" in log.user_custom_id %}class="table-warning-subtle"{% endif %}>
+                            <td class="ps-4 text-muted small">
+                                {{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+                            </td>
+                            <td>
+                                <span class="badge {% if 'ADMIN' in log.user_custom_id %}bg-danger{% else %}bg-secondary{% endif %}">
+                                    {{ log.user_custom_id }}
+                                </span>
+                            </td>
+                            <td class="fw-semibold">
+                                {{ log.action }}
+                            </td>
+                            <td class="text-end pe-4">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle">Secure</span>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-muted">
+                                <p class="mb-0">No audit records found in the secure vault.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Styling specifically for the print report */
+    @media print {
+        .navbar, .btn, .alert { display: none !important; }
+        .card { border: 1px solid #ccc !important; box-shadow: none !important; }
+        .container { width: 100% !important; max-width: 100% !important; }
+        .table-dark { color: black !important; background-color: white !important; }
+    }
+    .table-warning-subtle { background-color: rgba(255, 193, 7, 0.05); }
+</style>
+
+{% endblock %}

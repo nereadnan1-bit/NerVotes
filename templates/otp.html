@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5 col-lg-4">
+        <div class="card p-4 shadow animate__animated animate__zoomIn border-0">
+            <div class="text-center mb-4">
+                <div class="display-6 mb-2">🔐</div>
+                <h4 class="fw-bold" style="color: #1a237e;">Identity Verification</h4>
+                <p class="text-muted small">Enter the 6-digit OTP generated for your session.</p>
+            </div>
+
+            <form method="POST">
+                <div class="mb-4">
+                    <label class="form-label d-block text-center fw-bold">One-Time Password</label>
+                    <input type="text" name="otp" class="form-control form-control-lg text-center fw-bold letter-spacing-lg" 
+                           placeholder="000000" maxlength="6" pattern="\d{6}" required autofocus>
+                    <div class="form-text text-center mt-2">Check your system for the code.</div>
+                </div>
+
+                <button class="btn btn-success w-100 py-2 shadow-sm" type="submit">Verify & Login</button>
+            </form>
+            
+            <div class="text-center mt-3">
+                <a href="{{ url_for('login') }}" class="text-muted small text-decoration-none">← Back to Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .letter-spacing-lg { letter-spacing: 0.5rem; font-size: 1.5rem; }
+</style>
+
+{% endblock %}

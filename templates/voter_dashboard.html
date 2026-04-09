@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+
+<h2 class="mb-4">Voter Dashboard</h2>
+
+{% if active_elections %}
+
+<div class="row">
+
+{% for election in active_elections %}
+
+<div class="col-md-6 mb-4">
+
+<div class="card shadow-sm p-4">
+
+<h5 class="fw-bold">{{ election.name }}</h5>
+
+<p class="text-muted">
+Start: {{ election.start_date.strftime('%Y-%m-%d') }} <br>
+End: {{ election.end_date.strftime('%Y-%m-%d') }}
+</p>
+
+<div class="d-flex gap-2">
+
+<a href="{{ url_for('vote', election_id=election.id) }}"
+class="btn btn-primary">
+
+Vote Now
+
+</a>
+
+<a href="{{ url_for('results', election_id=election.id) }}"
+class="btn btn-outline-success">
+
+View Results
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+No active elections available.
+</div>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

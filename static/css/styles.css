@@ -1,0 +1,46 @@
+:root {
+    --gov-blue: #003366;
+    --gov-light-blue: #e6f0ff;
+    --accent-gold: #c5a059;
+}
+
+body {
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+.navbar {
+    background-color: var(--gov-blue) !important;
+}
+
+.navbar-brand, .nav-link {
+    color: white !important;
+}
+
+.btn-primary {
+    background-color: var(--gov-blue);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #002244;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.dashboard-stat {
+    border-left: 5px solid var(--gov-blue);
+}
+
+.badge-approved { background-color: #28a745; }
+.badge-pending { background-color: #ffc107; }
+
+/* Custom table styling */
+.table thead {
+    background-color: var(--gov-light-blue);
+}
